@@ -76,30 +76,6 @@
 	[self updateBackgroundPassthroughViews];
 }
 
-- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)theContext {
-	
-	if ([animationID isEqual:@"FadeIn"]) {
-		self.view.userInteractionEnabled = YES;
-		popoverVisible = YES;
-		[contentViewController viewDidAppear:YES];
-	} else {
-		popoverVisible = NO;
-		[contentViewController viewDidDisappear:YES];
-		[self.view removeFromSuperview];
-		self.view = nil;
-		[backgroundView removeFromSuperview];
-		[backgroundView release];
-		backgroundView = nil;
-		
-		BOOL userInitiatedDismissal = [(NSNumber *)theContext boolValue];
-		
-		if (userInitiatedDismissal) {
-			//Only send message to delegate in case the user initiated this event, which is if he touched outside the view
-			[delegate popoverControllerDidDismissPopover:self];
-		}
-	}
-}
-
 - (void)dismissPopoverAnimated:(BOOL)animated {
 	
 	[self dismissPopoverAnimated:animated userInitiated:NO];
@@ -124,7 +100,8 @@
 	[self dismissPopoverAnimated:NO];
 	
 	//First force a load view for the contentViewController so the popoverContentSize is properly initialized
-	contentViewController.view;
+	UIView *v = [contentViewController view];
+	[v setNeedsLayout];
 	
 	if (CGSizeEqualToSize(popoverContentSize, CGSizeZero)) {
 		popoverContentSize = contentViewController.contentSizeForViewInPopover;
@@ -150,6 +127,7 @@
 	backgroundView.delegate = self;
 	
 	[keyView addSubview:backgroundView];
+	[keyView bringSubviewToFront:backgroundView];
 	
 	containerView.frame = [theView convertRect:containerView.frame toView:backgroundView];
 	
@@ -167,21 +145,22 @@
 	[self.view becomeFirstResponder];
 	
 	if (animated) {
-		self.view.alpha = 0.0;
-		
-		[UIView beginAnimations:@"FadeIn" context:nil];
-		
-		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-		[UIView setAnimationDuration:FADE_DURATION];
-		
-		self.view.alpha = 1.0;
-		
-		[UIView commitAnimations];
+		self.view.alpha = 0.0f;
+		[UIView animateWithDuration:FADE_DURATION
+							  delay:0.0f
+							options:UIViewAnimationOptionCurveLinear
+						 animations:^{
+							 self.view.alpha = 1.0f;
+						 } 
+						 completion:^(BOOL finished) {
+							 self.view.userInteractionEnabled = YES;
+							 popoverVisible = YES;
+							 [contentViewController viewDidAppear:YES];
+						 }];
 	} else {
 		popoverVisible = YES;
 		[contentViewController viewDidAppear:animated];
-	}	
+	}
 }
 
 - (void)repositionPopoverFromRect:(CGRect)rect
@@ -242,16 +221,26 @@
 		[self.view resignFirstResponder];
 		if (animated) {
 			
-			self.view.userInteractionEnabled = NO;
-			[UIView beginAnimations:@"FadeOut" context:[NSNumber numberWithBool:userInitiated]];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-			
-			[UIView setAnimationDuration:FADE_DURATION];
-			
-			self.view.alpha = 0.0;
-			
-			[UIView commitAnimations];
+			[UIView animateWithDuration:FADE_DURATION
+								  delay:0.0f
+								options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+							 animations:^{
+								 self.view.alpha = 0.0;
+							 } 
+							 completion:^(BOOL finished) {
+								 popoverVisible = NO;
+								 [contentViewController viewDidDisappear:YES];
+								 [self.view removeFromSuperview];
+								 self.view = nil;
+								 [backgroundView removeFromSuperview];
+								 [backgroundView release];
+								 backgroundView = nil;
+								 								 
+								 if (userInitiated) {
+									 //Only send message to delegate in case the user initiated this event, which is if he touched outside the view
+									 [delegate popoverControllerDidDismissPopover:self];
+								 }
+							 }];
 		} else {
 			[contentViewController viewDidDisappear:animated];
 			[self.view removeFromSuperview];
