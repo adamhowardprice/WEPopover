@@ -36,6 +36,8 @@
 		749FAE861286130000AB97F9 /* WEPopoverContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FAE801286130000AB97F9 /* WEPopoverContainerView.m */; };
 		749FAE871286130000AB97F9 /* WEPopoverContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FAE821286130000AB97F9 /* WEPopoverContentViewController.m */; };
 		749FAE881286130000AB97F9 /* WEPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 749FAE841286130000AB97F9 /* WEPopoverController.m */; };
+		CF839796157308F30064D76A /* popoverBgGray.png in Resources */ = {isa = PBXBuildFile; fileRef = CF839794157308F30064D76A /* popoverBgGray.png */; };
+		CF839797157308F30064D76A /* popoverBgGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CF839795157308F30064D76A /* popoverBgGray@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +82,8 @@
 		749FAE841286130000AB97F9 /* WEPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPopoverController.m; sourceTree = "<group>"; };
 		749FAE851286130000AB97F9 /* WEPopoverParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WEPopoverParentView.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* WEPopover-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WEPopover-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CF839794157308F30064D76A /* popoverBgGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popoverBgGray.png; sourceTree = "<group>"; };
+		CF839795157308F30064D76A /* popoverBgGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverBgGray@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,10 +214,20 @@
 		749FAE721286123F00AB97F9 /* Popover */ = {
 			isa = PBXGroup;
 			children = (
+				CF839792157308E90064D76A /* Gray */,
 				7407D7C213A67A7A0074B83C /* Improved */,
 				7407D7C113A67A720074B83C /* Simple */,
 			);
 			name = Popover;
+			sourceTree = "<group>";
+		};
+		CF839792157308E90064D76A /* Gray */ = {
+			isa = PBXGroup;
+			children = (
+				CF839794157308F30064D76A /* popoverBgGray.png */,
+				CF839795157308F30064D76A /* popoverBgGray@2x.png */,
+			);
+			name = Gray;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +299,8 @@
 				7407D7DE13A67ABD0074B83C /* popoverArrowLeft.png in Resources */,
 				7407D7DF13A67ABD0074B83C /* popoverArrowDown@2x.png in Resources */,
 				7407D7E013A67ABD0074B83C /* popoverArrowDown.png in Resources */,
+				CF839796157308F30064D76A /* popoverBgGray.png in Resources */,
+				CF839797157308F30064D76A /* popoverBgGray@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
